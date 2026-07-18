@@ -1,3 +1,6 @@
+# SucharAI
+SucharAI is an AI-powered personal assistant built with Python, AI/ML, and Firebase, featuring voice and text interaction, offline capabilities, task automation, and intelligent contextual assistance across desktop and mobile platforms.
+
 # 🤖 SucharAI
 
 > An intelligent, privacy-focused AI assistant that works through voice and text, helping users automate daily tasks, answer questions, and interact naturally—online or offline.
