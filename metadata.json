@@ -1,0 +1,6 @@
+{
+  "name": "SucharAI",
+  "description": "SucharAI: A production-ready full-stack AI Chatbot featuring real-time streaming, JWT auth, conversation history, Markdown formatting, voice interaction, offline support, and RAG document search.",
+  "requestFramePermissions": ["microphone", "camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

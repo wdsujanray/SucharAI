@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Relational Database
+  db:
+    image: postgres:15-alpine
+    container_name: chatbot-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: chatbot
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # Caching and Rate Limiting Redis Store
+  redis:
+    image: redis:7-alpine
+    container_name: chatbot-redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # Python FastAPI Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: chatbot-backend
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://postgres:postgrespassword@db:5432/chatbot
+      REDIS_URL: redis://redis:6379/0
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      JWT_SECRET: ${JWT_SECRET:-super-secret-key-change-in-production}
+      CHAT_MODEL: gemini-3.5-flash
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - redis
+
+  # React Frontend (Nginx static delivery + API gateway proxy)
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: chatbot-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
