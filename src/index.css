@@ -1,0 +1,378 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Space Grotesk", sans-serif;
+  --bg-app: #09090b;
+  --panel: #0c0c0e;
+  --surface: #111827;
+  --surface-soft: #0f172a;
+  --card-bg: #0f172a;
+  --input-bg: #111827;
+  --input-border: rgba(148, 163, 184, 0.12);
+  --text-theme: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --muted: #94a3b8;
+  --border-theme: rgba(148, 163, 184, 0.2);
+  --accent: #34d399;
+  --accent-soft: rgba(52, 211, 153, 0.16);
+  --accent-strong: #10b981;
+}
+
+.theme-black {
+  --bg-app: #09090b;
+  --panel: #0c0c0e;
+  --surface: #111827;
+  --surface-soft: #0f172a;
+  --card-bg: #0f172a;
+  --input-bg: #111827;
+  --input-border: rgba(148, 163, 184, 0.12);
+  --text-theme: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --muted: #94a3b8;
+  --border-theme: rgba(148, 163, 184, 0.2);
+  --accent: #34d399;
+  --accent-soft: rgba(52, 211, 153, 0.16);
+  --accent-strong: #10b981;
+}
+
+.theme-white {
+  --bg-app: #f8fafc;
+  --panel: #ffffff;
+  --surface: #f8fafc;
+  --surface-soft: #eef2ff;
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --input-border: rgba(15, 23, 42, 0.12);
+  --text-theme: #111827;
+  --text-secondary: #475569;
+  --muted: #64748b;
+  --border-theme: rgba(15, 23, 42, 0.14);
+  --accent: #0f766e;
+  --accent-soft: rgba(15, 118, 110, 0.12);
+  --accent-strong: #0d9488;
+}
+
+.theme-gray {
+  --bg-app: #111827;
+  --panel: #1f2937;
+  --surface: #111827;
+  --surface-soft: #1e293b;
+  --card-bg: #111827;
+  --input-bg: #0f172a;
+  --input-border: rgba(148, 163, 184, 0.15);
+  --text-theme: #f8fafc;
+  --text-secondary: #d1d5db;
+  --muted: #9ca3af;
+  --border-theme: rgba(148, 163, 184, 0.25);
+  --accent: #2dd4bf;
+  --accent-soft: rgba(45, 212, 191, 0.16);
+  --accent-strong: #14b8a6;
+}
+
+.bg-app {
+  background-color: var(--bg-app);
+}
+
+.bg-panel {
+  background-color: var(--panel);
+}
+
+.bg-surface {
+  background-color: var(--surface);
+}
+
+.bg-surface-soft {
+  background-color: var(--surface-soft);
+}
+
+.bg-card {
+  background-color: var(--card-bg);
+}
+
+.bg-input {
+  background-color: var(--input-bg);
+}
+
+.text-theme {
+  color: var(--text-theme);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.markdown-body,
+.markdown-body p,
+.markdown-body li,
+.markdown-body strong,
+.markdown-body span,
+.markdown-body code,
+.markdown-body pre {
+  color: var(--text-theme) !important;
+}
+
+.markdown-body a {
+  color: var(--accent);
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.border-theme {
+  border-color: var(--border-theme);
+}
+
+.border-surface {
+  border-color: var(--border-theme);
+}
+
+.input-surface {
+  background-color: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--text-theme);
+}
+
+.input-surface::placeholder {
+  color: var(--text-secondary);
+}
+
+
+button,
+a,
+summary,
+label,
+select,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="color"],
+[role="button"],
+.cursor-pointer {
+  cursor: pointer;
+}
+
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+[contenteditable="true"] {
+  cursor: text;
+}
+
+input,
+textarea,
+select {
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-theme);
+  color: var(--text-theme);
+  border-radius: 0.95rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+  border-color: rgba(45, 212, 191, 0.35);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0 0 3px var(--accent-soft);
+  background-color: var(--input-bg);
+}
+
+button:hover,
+a:hover,
+[role="button"]:hover {
+  filter: brightness(1.06);
+}
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.2);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.4);
+}
+
+/* Custom fade transitions */
+.fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* AI Streaming Blinking Cursor */
+.streaming-active p:last-child::after,
+.streaming-active li:last-child::after {
+  content: "▊";
+  display: inline-block;
+  color: #10b981;
+  /* Emerald-500 */
+  animation: cursor-blink 0.8s step-end infinite;
+  margin-left: 4px;
+  vertical-align: middle;
+  font-size: 1.1em;
+}
+
+.streaming-bubble {
+  position: relative;
+  overflow: hidden;
+}
+
+.streaming-bubble::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(16, 185, 129, 0.16) 50%, transparent 100%);
+  transform: translateX(-100%);
+  animation: stream-shimmer 1.2s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes cursor-blink {
+
+  from,
+  to {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes stream-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Object Detection Laser Scan Animation */
+@keyframes scan {
+  0% {
+    top: 0%;
+  }
+
+  50% {
+    top: 100%;
+  }
+
+  100% {
+    top: 0%;
+  }
+}
+
+.animate-scan {
+  animation: scan 3s linear infinite;
+}
+
+/* Slide in & Fade in animations */
+@keyframes fadeInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInModal 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Utility to hide scrollbar but preserve scrolling capability */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Small glow for splash logo */
+.shadow-glow {
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.12), 0 2px 6px rgba(16, 185, 129, 0.06);
+}
+
+/* Splash logo animation */
+@keyframes splash-pop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  60% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes splash-pulse {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-4px) scale(1.01);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+.splash-logo {
+  animation: splash-pop 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards, splash-pulse 3s ease-in-out 0.8s infinite;
+  border-radius: 12px;
+}
