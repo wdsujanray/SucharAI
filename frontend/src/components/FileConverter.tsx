@@ -513,7 +513,7 @@ export default function FileConverter({ onBackToChat, onOpenSettings }: FileConv
                                         </div>
                                     ) : (
                                         <>
-                                            <textarea value={editorContent} onChange={(event) => setEditorContent(event.target.value)} rows={8} className="w-full rounded-lg border border-theme bg-panel p-3 text-sm text-theme outline-none" placeholder="Write or edit your document text here..." />
+                                            <textarea value={editorContent} onChange={(event) => setEditorContent(event.target.value)} rows={8} className="editor-surface w-full rounded-lg border border-slate-700 p-3 text-sm outline-none" placeholder="Write or edit your document text here..." />
                                             <div className="mt-3 flex items-center justify-between gap-2">
                                                 <input value={editorTitle} onChange={(event) => setEditorTitle(event.target.value)} className="w-full rounded-lg border border-theme bg-panel px-3 py-2 text-sm text-theme" placeholder="Document name" />
                                                 <button type="button" onClick={() => void saveEditorContent()} className="rounded-lg border border-emerald-500/25 bg-emerald-500/10 px-3 py-2 text-sm font-semibold text-emerald-400 transition hover:bg-emerald-500/20">Save</button>
@@ -540,7 +540,7 @@ export default function FileConverter({ onBackToChat, onOpenSettings }: FileConv
                             </button>
                         </div>
                         <div className="mt-4 rounded-xl border border-theme bg-surface/70 p-3">
-                            <textarea value={editorContent} onChange={(event) => setEditorContent(event.target.value)} rows={12} className="w-full rounded-lg border border-theme bg-panel p-3 text-sm text-theme outline-none" />
+                            <textarea value={editorContent} onChange={(event) => setEditorContent(event.target.value)} rows={12} className="editor-surface w-full rounded-lg border border-slate-700 p-3 text-sm outline-none" />
                         </div>
                         <div className="mt-4 flex items-center justify-between gap-2">
                             <input value={editorTitle} onChange={(event) => setEditorTitle(event.target.value)} className="w-full rounded-lg border border-theme bg-panel px-3 py-2 text-sm text-theme" />

@@ -186,7 +186,7 @@ function CodeBlockEditor({ language, content }: { language?: string; content: st
 
   return (
     <div
-      className="my-2 overflow-hidden rounded-lg border border-theme/60 bg-black/25"
+      className="code-editor my-2 overflow-hidden rounded-lg border border-slate-700/70 bg-black text-white"
       onMouseDown={(event) => event.stopPropagation()}
       onTouchStart={(event) => event.stopPropagation()}
       onClick={(event) => event.stopPropagation()}
@@ -236,16 +236,16 @@ function CodeBlockEditor({ language, content }: { language?: string; content: st
         </div>
       </div>
       {isEditing ? (
-        <div className="border-b border-slate-800/80 bg-[#0b1020] p-2">
+        <div className="border-b border-slate-800/80 bg-black p-2">
           <textarea
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
-            className="min-h-40 w-full resize-y rounded-md border border-slate-700/60 bg-[#111827] px-3 py-2 font-mono text-[11px] leading-5 text-slate-100 outline-none ring-0"
+            className="min-h-40 w-full resize-y rounded-md border border-slate-700/80 bg-black px-3 py-2 font-mono text-[11px] leading-5 text-white caret-white outline-none ring-0 placeholder:text-slate-400"
             spellCheck={false}
           />
         </div>
       ) : (
-        <pre className="max-h-72 overflow-auto whitespace-pre-wrap wrap-break-word bg-[#020617] px-3 py-2 font-mono text-[11px] leading-5 text-theme">
+        <pre className="max-h-72 overflow-auto whitespace-pre-wrap wrap-break-word bg-black px-3 py-2 font-mono text-[11px] leading-5 text-white">
           {syntaxHighlightCode(draft)}
         </pre>
       )}
@@ -1325,7 +1325,7 @@ User: ${user?.fullName || "User"} (${user?.email || ""})
       let currentConvId = activeConversationId;
       if (!currentConvId) {
         try {
-          const chatTitle = (input.trim() || uploadedFiles[0].name).split(" ").slice(0, 4).join(" ") || uploadedFiles[0].name;
+          const chatTitle = (textToSend || uploadedFiles[0].name).split(" ").slice(0, 4).join(" ") || uploadedFiles[0].name;
           currentConvId = await createConversation(chatTitle);
           setActiveConversationId(currentConvId, true);
         } catch (err) {
@@ -1355,7 +1355,9 @@ User: ${user?.fullName || "User"} (${user?.email || ""})
 
         if (currentConvId) {
           const chatPrompt = textToSend || "Please analyze the uploaded file(s) and summarize their contents.";
-          await sendChatMessage(currentConvId, chatPrompt, () => { });
+          const sendPromise = sendChatMessage(currentConvId, chatPrompt, () => { });
+          setInput("");
+          await sendPromise;
           resetComposer();
         }
       } catch (err: any) {
@@ -1426,7 +1428,9 @@ User: ${user?.fullName || "User"} (${user?.email || ""})
     }
 
     if (currentConvId) {
-      await sendChatMessage(currentConvId, textToSend, () => { });
+      const sendPromise = sendChatMessage(currentConvId, textToSend, () => { });
+      setInput("");
+      await sendPromise;
       resetComposer();
     }
   };
@@ -2720,10 +2724,10 @@ User: ${user?.fullName || "User"} (${user?.email || ""})
             placeholder="Type your messages or ask for help..."
             className="min-h-11 max-h-32 w-full resize-none rounded-2xl border border-theme bg-input px-4 py-3 text-sm text-theme placeholder:text-muted focus:outline-none"
           />
-          {(input.trim() || uploadedFiles.length) && !isStreaming && !isSending && !uploading && (
+          {!isStreaming && !isSending && (
             <button
               type="submit"
-              disabled={uploading}
+              disabled={uploading || (!input.trim() && uploadedFiles.length === 0)}
               className="w-full rounded-2xl px-4 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:bg-panel disabled:text-secondary text-black text-sm font-bold transition sm:w-auto flex items-center justify-center gap-2"
               title={uploading ? "Processing uploaded file" : "Send message"}
             >

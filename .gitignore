@@ -9,3 +9,6 @@ coverage/
 .idea/
 uploads/
 *.zip
+__pycache__/
+*.py[cod]
+backend/ai_engine/artifacts/

@@ -380,7 +380,7 @@ export default function PptToConvert({ onBackToChat, onOpenSettings, initialFile
                                     <div className="mt-3 rounded-xl border border-dashed border-theme bg-surface/60 p-4 text-sm text-secondary">The editor workspace is available for PDF and Microsoft Office files only.</div>
                                 ) : (
                                     <>
-                                        <textarea value={editorContent} onChange={(event) => setEditorContent(event.target.value)} rows={8} className="mt-3 w-full rounded-lg border border-theme bg-panel p-3 text-sm text-theme outline-none" placeholder="Start typing..." />
+                                        <textarea value={editorContent} onChange={(event) => setEditorContent(event.target.value)} rows={8} className="editor-surface mt-3 w-full rounded-lg border border-slate-700 p-3 text-sm outline-none" placeholder="Start typing..." />
                                         <div className="mt-3 flex items-center gap-2">
                                             <input value={editorTitle} onChange={(event) => setEditorTitle(event.target.value)} className="w-full rounded-lg border border-theme bg-panel px-3 py-2 text-sm text-theme" placeholder="Document name" />
                                             <button type="button" onClick={() => void handleSaveEditor()} className="rounded-lg border border-emerald-500/25 bg-emerald-500/10 px-3 py-2 text-sm font-semibold text-emerald-400 transition hover:bg-emerald-500/20">Save</button>

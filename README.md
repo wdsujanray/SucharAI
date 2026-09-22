@@ -8,6 +8,45 @@ SucharAI is an AI-powered personal assistant built with Python, AI/ML, and Fireb
 - `data/` contains the local JSON database used by the backend.
 - `test/` contains backend regression tests.
 
+### Python AI Service
+
+The project includes a separate FastAPI AI processing service in `backend/`:
+
+- `backend/app.py` exposes `/health`, `/api/ai/chat`, and `/api/ai/object-detection`.
+- `backend/ai_engine/processor.py` handles Gemini chat and image processing.
+- `backend/services/data_manager.py` provides thread-safe CRUD and conversation bundles for local chat/user data.
+- `backend/requirements.txt` contains Python dependencies.
+- `backend/Dockerfile` packages the service for deployment.
+
+Run it locally with:
+
+```text
+uvicorn app:app --app-dir backend --reload --port 3001
+```
+
+Or run the container with `docker compose up --build backend`. Set `GEMINI_API_KEY` in the environment for live AI responses; without it, chat and detection return safe offline fallback responses.
+
+### AI Training and Testing
+
+The lightweight local intent model can be trained and evaluated without a GPU or API key:
+
+```text
+python backend/ai_engine/train_model.py
+python -m unittest discover -s backend/ai_engine -p "test_*.py"
+```
+
+Training reads `ai_training_data.jsonl`, writes `backend/ai_engine/artifacts/intent_model.json`, and reports accuracy metrics. Add JSONL examples with `text` and `label` fields to extend the local training set.
+
+### Chat and User Data Management
+
+The Python data layer is tested independently with temporary databases:
+
+```text
+python -m unittest discover -s backend/services -p "test_*.py"
+```
+
+It manages users, conversations, messages, documents, and feedback records with atomic JSON writes. `conversation_bundle()` returns a conversation together with its related messages and documents.
+
 # 🤖 SucharAI
 
 > An intelligent, privacy-focused AI assistant that works through voice and text, helping users automate daily tasks, answer questions, and interact naturally—online or offline.

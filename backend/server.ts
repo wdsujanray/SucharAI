@@ -204,17 +204,23 @@ async function extractTextFromUpload(file: any, options?: { fastMode?: boolean }
   }
 }
 
-function normalizeDetectedObject(raw: any) {
+interface DetectedObject {
+  box_2d: [number, number, number, number];
+  label: string;
+  confidence: number;
+}
+
+function normalizeDetectedObject(raw: any): DetectedObject | null {
   if (!raw || typeof raw !== "object") return null;
 
-  const box = Array.isArray(raw.box_2d) ? raw.box_2d : [];
+  const box: unknown[] = Array.isArray(raw.box_2d) ? raw.box_2d : [];
   if (box.length !== 4) return null;
 
-  const values = box.map((value) => {
+  const values: number[] = [];
+  for (const value of box) {
     const num = Number(value);
-    if (!Number.isFinite(num)) return 0;
-    return Math.min(1000, Math.max(0, num));
-  });
+    values.push(Number.isFinite(num) ? Math.min(1000, Math.max(0, num)) : 0);
+  }
 
   const [ymin, xmin, ymax, xmax] = values;
   const label = String(raw.label || "").trim();
@@ -285,14 +291,21 @@ async function detectObjectsFromImage(file: any) {
       }
     }
 
-    const list = Array.isArray(parsed) ? parsed : Array.isArray(parsed?.objects) ? parsed.objects : [];
-    const normalized = list
-      .map(normalizeDetectedObject)
-      .filter(Boolean)
-      .filter((item, index, arr) => {
-        const duplicate = arr.findIndex((candidate) => candidate.label.toLowerCase() === item.label.toLowerCase() && candidate.box_2d.every((value, idx) => Math.abs(value - item.box_2d[idx]) < 25));
-        return duplicate === index;
-      });
+    const list: unknown[] = Array.isArray(parsed) ? parsed : Array.isArray(parsed?.objects) ? parsed.objects : [];
+    const normalizedCandidates: DetectedObject[] = [];
+    for (const rawObject of list) {
+      const normalizedObject = normalizeDetectedObject(rawObject);
+      if (normalizedObject) normalizedCandidates.push(normalizedObject);
+    }
+
+    const normalized: DetectedObject[] = [];
+    for (const candidate of normalizedCandidates) {
+      const duplicate = normalized.some((existing) =>
+        existing.label.toLowerCase() === candidate.label.toLowerCase() &&
+        existing.box_2d.every((boxValue, boxIndex) => Math.abs(boxValue - candidate.box_2d[boxIndex]) < 25)
+      );
+      if (!duplicate) normalized.push(candidate);
+    }
 
     return normalized.slice(0, 12);
   } catch (error: any) {

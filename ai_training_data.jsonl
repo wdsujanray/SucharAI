@@ -1,0 +1,8 @@
+{"text":"hello there","label":"greeting"}
+{"text":"good morning SucharAI","label":"greeting"}
+{"text":"what can you do","label":"capabilities"}
+{"text":"help me understand your features","label":"capabilities"}
+{"text":"summarize this document","label":"document_analysis"}
+{"text":"analyze the uploaded file","label":"document_analysis"}
+{"text":"what is the weather today","label":"search"}
+{"text":"search the web for current news","label":"search"}

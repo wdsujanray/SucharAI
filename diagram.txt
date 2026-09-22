@@ -8,8 +8,15 @@ SucharAI/
 |   |-- index.html
 |   |-- vite.config.ts
 |   |-- src/
-|       |-- App.tsx                   Application shell and routing state
+|       |-- App.tsx                   Application shell and view selection
 |       |-- main.tsx                  React entry point
+|       |-- pages/                    Feature-level page files
+|       |   |-- auth/
+|       |   |   |-- AuthPage.tsx      Authentication state and handlers
+|       |   |   |-- LoginPage.tsx     Login form
+|       |   |   `-- RegisterPage.tsx  Registration form
+|       |   `-- profile/
+|       |       `-- ProfilePage.tsx   Profile and security settings
 |       |-- components/               Reusable interface components
 |       |   |-- layout/               AppHeader, AppFooter
 |       |   |-- ui/                   Button, Card
@@ -30,10 +37,15 @@ SucharAI/
 |       |-- db.ts                     Local JSON database access
 |       |-- extraction.ts              Office/document extraction
 |       |-- rag.ts                    Retrieval-augmented search
+|   |-- services/
+|       |-- data_manager.py           Python chat/user CRUD service
+|       `-- test_data_manager.py      Data-management tests
 |-- data/
 |   |-- db.json                       Local application data
 |-- test/                              Backend regression tests
 |-- android/                           Capacitor Android project
+|-- .github/workflows/                 GitHub Pages deployment
+|   `-- deploy-pages.yml
 |-- package.json                       Scripts and dependencies
 |-- diagram.txt                        This document
 
@@ -91,6 +103,13 @@ frontend/
     |-- App.tsx
     |-- index.css
     |-- assets/
+    |-- pages/
+    |   |-- auth/
+    |   |   |-- AuthPage.tsx
+    |   |   |-- LoginPage.tsx
+    |   |   `-- RegisterPage.tsx
+    |   `-- profile/
+    |       `-- ProfilePage.tsx
     |-- components/
     |   |-- layout/
     |   |   |-- AppHeader.tsx
@@ -133,7 +152,8 @@ Fig 3.4.3 -- User Authentication and Profile Interface
            |
            v
 +---------------------+       Firebase Auth       +------------------+
-| Auth form in App.tsx| -----------------------> | Firebase         |
+| AuthPage + LoginPage| -----------------------> | Firebase         |
+| + RegisterPage      | <----------------------- | Authentication   |
 | email/password      |                          | Authentication   |
 | Google sign-in      | <----------------------- |                  |
 +----------+----------+                          +------------------+
@@ -147,6 +167,7 @@ Fig 3.4.3 -- User Authentication and Profile Interface
            v
 +---------------------+
 | Profile and settings|
+| ProfilePage         |
 | SettingsModal       |
 +---------------------+
 
@@ -184,54 +205,80 @@ Fig 3.4.5 -- AI Chatbot Interface
                                         | chain and offline mode  |
                                         +-------------------------+
 
+Message order:
+user submits -> user message appears locally -> input is cleared -> AI stream starts
+
 
 Fig 3.4.6 -- Python AI Processing and Deployment
 -------------------------------------------------
 
-Current implementation note:
-The active backend in this repository is TypeScript/Express, not Python.
-This diagram represents the compatible Python service boundary if a Python
-AI service is added later.
+The repository now includes a Python FastAPI AI processing service alongside
+the TypeScript/Express application backend. The Python service is deployed
+through Docker Compose and reads GEMINI_API_KEY from the environment.
 
 +---------------------+       HTTP/JSON       +--------------------------+
-| backend/server.ts   | ------------------->  | Optional Python AI       |
-| TypeScript gateway  | <-------------------  | service                  |
-+---------------------+                       | FastAPI/Flask            |
-                                              | model inference          |
+| backend/server.ts   | ------------------->  | backend/app.py           |
+| TypeScript gateway  | <-------------------  | Python FastAPI AI service|
++---------------------+                       +------------+-------------+
+                                                           |
+                                                           v
+                                              +--------------------------+
+                                              | ai_engine/processor.py   |
+                                              | Gemini chat and vision   |
                                               +------------+-------------+
                                                            |
                                                            v
                                               +--------------------------+
-                                              | Model runtime / GPU /    |
-                                              | CPU deployment           |
+                                              | Model runtime / CPU or   |
+                                              | GPU deployment           |
                                               +--------------------------+
+
+Python service endpoints:
+GET  /health
+POST /api/ai/chat
+POST /api/ai/object-detection
+
+Deployment:
+docker compose up --build backend
+Local development: uvicorn app:app --app-dir backend --reload --port 3001
 
 
 Fig 3.4.7 -- AI Training and Testing
 -------------------------------------
 
 +------------------+     prepare      +-------------------+
-| Curated data    | ----------------> | Training pipeline |
-| text, images,   |                   | optional Python  |
-| conversations   |                   | AI module        |
+| ai_training_     | ----------------> | train_model.py   |
+| data.jsonl       |                   | local intent     |
+| text + labels    |                   | classifier       |
 +------------------+                   +---------+---------+
                                                  |
                                                  | trained model
                                                  v
                                       +-----------------------+
-                                      | Evaluation and tests  |
-                                      | accuracy, latency,    |
-                                      | regression checks     |
+                                      | intent_model.json     |
+                                      | saved model artifact  |
+                                      +-----------+-----------+
+                                                  |
+                                                  v
+                                      +-----------------------+
+                                      | test_training.py      |
+                                      | accuracy and          |
+                                      | prediction tests     |
                                       +-----------+-----------+
                                                   |
                                                   v
                                       +-----------------------+
                                       | Deployment            |
-                                      | backend AI provider   |
+                                      | FastAPI AI service    |
+                                      | or Gemini provider    |
                                       +-----------------------+
 
 Current repository testing path:
-frontend build/typecheck + test/*.test.ts backend regression tests.
+frontend build/typecheck + test/*.test.ts backend regression tests +
+`python -m unittest discover -s backend/ai_engine -p "test_*.py"`.
+
+GitHub Pages deployment path:
+push to src -> GitHub Actions -> Vite build -> dist/ -> GitHub Pages.
 
 
 Fig 3.4.8 -- Chat and User Data Management
@@ -258,6 +305,10 @@ Fig 3.4.8 -- Chat and User Data Management
 Data groups:
 users | conversations | messages | documents | feedbacks | uploads
 
+Python data-management operations:
+create_record -> update_record -> get_record/list_records -> delete_record
+conversation_bundle -> conversation + related messages + related documents
+
 
 Fig 3.4.9 -- Final SucharAI Application
 ----------------------------------------
@@ -275,6 +326,12 @@ Fig 3.4.9 -- Final SucharAI Application
 |----------------------------------------------------------------|
 | React frontend -> TypeScript backend -> AI, Firebase, database |
 +----------------------------------------------------------------+
+
+Deployment:
+
+    GitHub repository: https://github.com/wdsujanray/SucharAI
+    GitHub Pages:     https://wdsujanray.github.io/SucharAI/
+    Source branch:    src
 
 User flow:
 

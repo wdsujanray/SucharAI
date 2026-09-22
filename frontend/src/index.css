@@ -140,6 +140,20 @@
   color: var(--text-secondary);
 }
 
+.code-editor pre span {
+  color: #ffffff !important;
+}
+
+.editor-surface {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  caret-color: #ffffff;
+}
+
+.editor-surface::placeholder {
+  color: #a1a1aa !important;
+}
+
 
 button,
 a,

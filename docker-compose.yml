@@ -23,7 +23,7 @@ services:
     ports:
       - "6379:6379"
 
-  # Python FastAPI Backend API
+  # Python FastAPI AI processing service
   backend:
     build:
       context: ./backend
@@ -37,7 +37,7 @@ services:
       JWT_SECRET: ${JWT_SECRET:-super-secret-key-change-in-production}
       CHAT_MODEL: gemini-3.5-flash
     ports:
-      - "3000:3000"
+      - "3001:3000"
     depends_on:
       - db
       - redis
