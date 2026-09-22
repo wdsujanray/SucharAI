@@ -34,7 +34,7 @@ app.use("/uploads", express.static(uploadsDir));
 
 // Initialize Gemini clients from multiple configured API keys.
 const GEMINI_API_KEYS = [
-  (process.env.GEMINI_API_KEY || "").trim(),
+  (process.env.GEMINI_API_KEY || "").trim()
 ].filter(Boolean);
 
 const geminiClients = GEMINI_API_KEYS.map((key) => new GoogleGenAI({
