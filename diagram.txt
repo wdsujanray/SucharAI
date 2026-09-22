@@ -1,0 +1,296 @@
+SucharAI Diagram Documentation
+==============================
+
+Project root:
+
+SucharAI/
+|-- frontend/                         React.js + Vite application
+|   |-- index.html
+|   |-- vite.config.ts
+|   |-- src/
+|       |-- App.tsx                   Application shell and routing state
+|       |-- main.tsx                  React entry point
+|       |-- components/               Reusable interface components
+|       |   |-- layout/               AppHeader, AppFooter
+|       |   |-- ui/                   Button, Card
+|       |   |-- ChatWindow.tsx
+|       |   |-- Sidebar.tsx
+|       |   |-- ObjectDetectionPanel.tsx
+|       |   |-- FileConverter.tsx
+|       |   |-- SettingsModal.tsx
+|       |-- assets/                   Images, logos, and frontend assets
+|       |-- lib/                      Firebase, search, offline utilities
+|       |-- store.ts                  Global Zustand state and API client
+|       |-- types.ts                  Shared frontend types
+|       |-- index.css                 Tailwind CSS and theme styles
+|-- backend/                          TypeScript + Express services
+|   |-- server.ts                     Main API server
+|   |-- server-mobile.ts              Mobile server entry point
+|   |-- server/
+|       |-- db.ts                     Local JSON database access
+|       |-- extraction.ts              Office/document extraction
+|       |-- rag.ts                    Retrieval-augmented search
+|-- data/
+|   |-- db.json                       Local application data
+|-- test/                              Backend regression tests
+|-- android/                           Capacitor Android project
+|-- package.json                       Scripts and dependencies
+|-- diagram.txt                        This document
+
+
+List of Figures
+==============
+
+Figure No. -- Title
+
+Fig 3.1   -- SucharAI System Architecture Diagram
+Fig 3.4.1 -- SucharAI Frontend Project Structure
+Fig 3.4.2 -- React.js and Tailwind CSS Interface
+Fig 3.4.3 -- User Authentication and Profile Interface
+Fig 3.4.4 -- Backend and Database Integration
+Fig 3.4.5 -- AI Chatbot Interface
+Fig 3.4.6 -- Python AI Processing and Deployment
+Fig 3.4.7 -- AI Training and Testing
+Fig 3.4.8 -- Chat and User Data Management
+Fig 3.4.9 -- Final SucharAI Application
+
+
+Fig 3.1 -- SucharAI System Architecture Diagram
+------------------------------------------------
+
++-----------------------+       HTTPS/API        +------------------------+
+|     End User          | <--------------------> |      frontend/         |
+| Browser or Android    |                        | React + Vite + Tailwind|
++-----------+-----------+                        +-----------+------------+
+            |                                                |
+            | User actions                                    | Axios requests
+            v                                                v
++-----------------------+                        +------------------------+
+| Chat, authentication, |                        |       backend/          |
+| file conversion,      | --------------------> | Express API server     |
+| object detection UI   |                        | server.ts              |
++-----------------------+                        +-----+---------+----------+
+                                                        |         |
+                              +-------------------------+         +------------------+
+                              v                                    v                  
+                    +------------------+                 +------------------------+
+                    | data/db.json     |                 | AI and external APIs  |
+                    | users, chats,    |                 | Gemini, Firebase,      |
+                    | messages, files |                 | Google Lens, Storage  |
+                    +------------------+                 +------------------------+
+
+
+Fig 3.4.1 -- SucharAI Frontend Project Structure
+--------------------------------------------------
+
+frontend/
+|-- index.html
+|-- vite.config.ts
+`-- src/
+    |-- main.tsx
+    |-- App.tsx
+    |-- index.css
+    |-- assets/
+    |-- components/
+    |   |-- layout/
+    |   |   |-- AppHeader.tsx
+    |   |   `-- AppFooter.tsx
+    |   |-- ui/
+    |   |   |-- Button.tsx
+    |   |   `-- Card.tsx
+    |   |-- ChatWindow.tsx
+    |   |-- Sidebar.tsx
+    |   |-- ObjectDetectionPanel.tsx
+    |   |-- FileConverter.tsx
+    |   `-- SettingsModal.tsx
+    |-- lib/
+    `-- store.ts
+
+
+Fig 3.4.2 -- React.js and Tailwind CSS Interface
+------------------------------------------------
+
++-------------------------------------------------------------+
+| App.tsx                                                     |
+|  +----------------+  +-----------------------------------+  |
+|  | Sidebar        |  | ChatWindow / FileConverter         |  |
+|  | conversations  |  | messages, uploads, actions         |  |
+|  +----------------+  +-----------------------------------+  |
+|                                                             |
+|  Reusable UI: AppHeader | AppFooter | Button | Card         |
+|  Styling: Tailwind utility classes + index.css themes      |
++-------------------------------------------------------------+
+
+React state -> Zustand store -> Axios API client -> backend/
+
+
+Fig 3.4.3 -- User Authentication and Profile Interface
+--------------------------------------------------------
+
++---------------------+
+| Sign In / Register  |
++----------+----------+
+           |
+           v
++---------------------+       Firebase Auth       +------------------+
+| Auth form in App.tsx| -----------------------> | Firebase         |
+| email/password      |                          | Authentication   |
+| Google sign-in      | <----------------------- |                  |
++----------+----------+                          +------------------+
+           |
+           v
++---------------------+
+| Token and user state|
+| Zustand store       |
++----------+----------+
+           |
+           v
++---------------------+
+| Profile and settings|
+| SettingsModal       |
++---------------------+
+
+
+Fig 3.4.4 -- Backend and Database Integration
+----------------------------------------------
+
++----------------+       REST API        +----------------------+
+| frontend/      | -------------------> | backend/server.ts    |
+| store.ts       | <------------------- | Express routes       |
++----------------+                      +----------+-----------+
+                                                   |
+                         +-------------------------+------------------+
+                         v                                            v
+                 +------------------+                         +----------------+
+                 | backend/server/  |                         | data/db.json   |
+                 | db.ts            | <---------------------- | local storage  |
+                 | extraction.ts    |                         +----------------+
+                 | rag.ts           |
+                 +------------------+
+
+
+Fig 3.4.5 -- AI Chatbot Interface
+---------------------------------
+
++-------------------+       message       +----------------------+
+| ChatWindow        | ------------------> | /api/conversations/  |
+|                   |                     | chat                 |
+| user input        | <------------------ | streamed AI reply    |
+| file attachments  |                     +----------+-----------+
+| message history   |                                |
++-------------------+                                v
+                                        +-------------------------+
+                                        | Gemini AI model fallback|
+                                        | chain and offline mode  |
+                                        +-------------------------+
+
+
+Fig 3.4.6 -- Python AI Processing and Deployment
+-------------------------------------------------
+
+Current implementation note:
+The active backend in this repository is TypeScript/Express, not Python.
+This diagram represents the compatible Python service boundary if a Python
+AI service is added later.
+
++---------------------+       HTTP/JSON       +--------------------------+
+| backend/server.ts   | ------------------->  | Optional Python AI       |
+| TypeScript gateway  | <-------------------  | service                  |
++---------------------+                       | FastAPI/Flask            |
+                                              | model inference          |
+                                              +------------+-------------+
+                                                           |
+                                                           v
+                                              +--------------------------+
+                                              | Model runtime / GPU /    |
+                                              | CPU deployment           |
+                                              +--------------------------+
+
+
+Fig 3.4.7 -- AI Training and Testing
+-------------------------------------
+
++------------------+     prepare      +-------------------+
+| Curated data    | ----------------> | Training pipeline |
+| text, images,   |                   | optional Python  |
+| conversations   |                   | AI module        |
++------------------+                   +---------+---------+
+                                                 |
+                                                 | trained model
+                                                 v
+                                      +-----------------------+
+                                      | Evaluation and tests  |
+                                      | accuracy, latency,    |
+                                      | regression checks     |
+                                      +-----------+-----------+
+                                                  |
+                                                  v
+                                      +-----------------------+
+                                      | Deployment            |
+                                      | backend AI provider   |
+                                      +-----------------------+
+
+Current repository testing path:
+frontend build/typecheck + test/*.test.ts backend regression tests.
+
+
+Fig 3.4.8 -- Chat and User Data Management
+-------------------------------------------
+
++-------------------+       create/read/update/delete       +------------------+
+| Sidebar           | ----------------------------------->  | Zustand store    |
+| conversations     | <-----------------------------------  | store.ts         |
++-------------------+                                       +--------+---------+
+                                                                    |
+                                                                    v
+                                                        +----------------------+
+                                                        | Firebase Firestore   |
+                                                        | online persistence   |
+                                                        +----------+-----------+
+                                                                   |
+                                                                   v
+                                                        +----------------------+
+                                                        | Local fallback       |
+                                                        | data/db.json or      |
+                                                        | browser localStorage |
+                                                        +----------------------+
+
+Data groups:
+users | conversations | messages | documents | feedbacks | uploads
+
+
+Fig 3.4.9 -- Final SucharAI Application
+----------------------------------------
+
++----------------------------------------------------------------+
+|                         SucharAI                               |
+|----------------------------------------------------------------|
+| Sidebar                                                        |
+|  - conversations        Main workspace                         |
+|  - search               - AI chat                              |
+|  - archive              - object detection                     |
+|  - settings             - Google Lens source links             |
+|  - file converter       - document conversion                 |
+|                         - responsive mobile layout             |
+|----------------------------------------------------------------|
+| React frontend -> TypeScript backend -> AI, Firebase, database |
++----------------------------------------------------------------+
+
+User flow:
+
+  Open app
+      |
+      v
+  Authenticate or use available offline mode
+      |
+      v
+  Start chat / upload file / detect object / convert document
+      |
+      v
+  Frontend sends request to backend
+      |
+      v
+  Backend calls database and AI/external services
+      |
+      v
+  Result appears in the responsive SucharAI interface

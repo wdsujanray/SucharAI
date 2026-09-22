@@ -1,6 +1,13 @@
 # SucharAI
 SucharAI is an AI-powered personal assistant built with Python, AI/ML, and Firebase, featuring voice and text interaction, offline capabilities, task automation, and intelligent contextual assistance across desktop and mobile platforms.
 
+## Project Structure
+
+- `frontend/` contains the React single-page application and Vite configuration.
+- `backend/` contains the Express API, database helpers, extraction, and RAG services.
+- `data/` contains the local JSON database used by the backend.
+- `test/` contains backend regression tests.
+
 # 🤖 SucharAI
 
 > An intelligent, privacy-focused AI assistant that works through voice and text, helping users automate daily tasks, answer questions, and interact naturally—online or offline.
@@ -216,7 +223,7 @@ SucharAI/
 ├── firebase/
 ├── api/
 ├── config/
-├── assets/
+├── frontend/src/assets/
 ├── docs/
 ├── tests/
 ├── scripts/
